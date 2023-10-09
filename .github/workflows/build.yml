@@ -21,9 +21,9 @@ jobs:
           cache: maven
 
       - name: change working directory
-        run: cd project-template
-      - name: maven build
-        run: mvn package
+        run: |
+          cd project-template
+          mvn package
 
       - id: jacoco
         if: ( github.event_name != 'workflow_dispatch' )
@@ -48,8 +48,9 @@ jobs:
           distribution: 'oracle'
           cache: maven
       - name: change working directory
-        run: cd project-template
-      - run: mvn checkstyle:check
+        run: |
+          cd project-template 
+          mvn checkstyle:check
 
   test:
     name: test
@@ -63,6 +64,6 @@ jobs:
           distribution: 'oracle'
           cache: maven
       - name: change working directory
-        run: cd project-template
-      - run: mvn verify
-
+        run: |
+          cd project-template
+          mvn verify
