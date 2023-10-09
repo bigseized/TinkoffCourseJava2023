@@ -34,8 +34,8 @@ jobs:
           title: Code Coverage
           update-comment: true
 
-  checkstyle:
-    name: checkstyle
+  test:
+    name: test
     runs-on: ubuntu-latest
 
     steps:
@@ -46,4 +46,4 @@ jobs:
           distribution: 'oracle'
           cache: maven
 
-      - run: mvn checkstyle:check
+      - run: mvn verify
