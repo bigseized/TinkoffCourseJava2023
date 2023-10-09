@@ -20,6 +20,8 @@ jobs:
           distribution: 'oracle'
           cache: maven
 
+      - name: change working directory
+        run: cd project-template
       - name: maven build
         run: mvn package
 
@@ -34,6 +36,21 @@ jobs:
           title: Code Coverage
           update-comment: true
 
+  checkstyle:
+    name: checkstyle
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'oracle'
+          cache: maven
+      - name: change working directory
+        run: cd project-template
+      - run: mvn checkstyle:check
+
   test:
     name: test
     runs-on: ubuntu-latest
@@ -45,5 +62,7 @@ jobs:
           java-version: '21'
           distribution: 'oracle'
           cache: maven
-
+      - name: change working directory
+        run: cd project-template
       - run: mvn verify
+
