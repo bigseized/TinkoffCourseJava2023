@@ -11,7 +11,9 @@ public class BitShiftTest {
         "8,1,4",
         "2,1,1",
         "0,2,0",
-        "3,10,3"
+        "3,10,3",
+        "-4,10,-1",
+        "4,-12,-1"
     })
     @DisplayName("Тест сдвига вправо")
     public void rotateLeft_shouldReturnValue_whenCorrectInput(int input, int shift, int ans) {
@@ -24,7 +26,9 @@ public class BitShiftTest {
         "16,1,1",
         "2,1,1",
         "0,2,0",
-        "3,10,3"
+        "3,10,3",
+        "-4,10,-1",
+        "4,-12,-1"
     })
     @DisplayName("Тест сдвига влево")
     public void rotateRight_shouldReturnValue_whenCorrectInput(int input, int shift, int ans) {

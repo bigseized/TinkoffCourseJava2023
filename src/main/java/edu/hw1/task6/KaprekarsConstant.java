@@ -2,31 +2,22 @@ package edu.hw1.task6;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class KaprekarsConstant {
 
-    final static int KAPREKARS_CONST = 6174;
+    private final static int KAPREKARS_CONST = 6174;
+    private final static int MIN_AVAILABLE_VALUE = 1000;
+    private final static int MAX_AVAILABLE_VALUE = 9998;
+    private final static int MAX_ITERATIONS = 7;
 
     private KaprekarsConstant() {}
 
-    private static Character[] typecastCharArrToWrappedCharArr(char[] charArray) {
-        Character[] wrappedCharArray = new Character[charArray.length];
-
-        for (int i = 0; i < charArray.length; i++) {
-            wrappedCharArray[i] = charArray[i];
-        }
-        return wrappedCharArray;
-    }
-
-    private static int typecastWrappedCharacterArrToInt(Character[] charactersArray) {
-        String arrInStringFormat = "";
-        for (char i : charactersArray) {
-            arrInStringFormat = arrInStringFormat.concat(String.valueOf(i));
-        }
-        return Integer.parseInt(arrInStringFormat);
-    }
-
     public static int countK(int number) {
+        if (number < MIN_AVAILABLE_VALUE || number > MAX_AVAILABLE_VALUE || checkIsAllDigitsEqual(number)) {
+            return -1;
+        }
         if (number == KAPREKARS_CONST) {
             return 0;
         }
@@ -34,7 +25,7 @@ public final class KaprekarsConstant {
 
         int counterOfTransforms = 0;
 
-        while (true) {
+        while (counterOfTransforms <= MAX_ITERATIONS) {
             String numberInStringFormat = String.valueOf(numberForTransforms);
             char[] numberInCharArrayFormat = numberInStringFormat.toCharArray();
             Character[] numberInWrapCharArrFormat = typecastCharArrToWrappedCharArr(numberInCharArrayFormat);
@@ -53,9 +44,31 @@ public final class KaprekarsConstant {
             } else {
                 numberForTransforms = maxNumber - minNumber;
                 counterOfTransforms++;
-
             }
         }
+        return -1;
+    }
 
+    private static Character[] typecastCharArrToWrappedCharArr(char[] charArray) {
+        Character[] wrappedCharArray = new Character[charArray.length];
+        for (int i = 0; i < charArray.length; i++) {
+            wrappedCharArray[i] = charArray[i];
+        }
+        return wrappedCharArray;
+    }
+
+    private static int typecastWrappedCharacterArrToInt(Character[] charactersArray) {
+        String arrInStringFormat = "";
+        for (char i : charactersArray) {
+            arrInStringFormat = arrInStringFormat.concat(String.valueOf(i));
+        }
+        return Integer.parseInt(arrInStringFormat);
+    }
+
+    private static boolean checkIsAllDigitsEqual(int number) {
+        String numberInStringFormat = String.valueOf(number);
+        Pattern numberWithEqualDigitsPattern = Pattern.compile("^([0-9])\\1{3}$");
+        Matcher matcher = numberWithEqualDigitsPattern.matcher(numberInStringFormat);
+        return matcher.matches();
     }
 }

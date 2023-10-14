@@ -2,8 +2,9 @@ package edu.hw1.task5;
 
 
 public final class Palindrome {
-    final static int DEC = 10;
-    final static int MAX_VALUE_OF_ONE_DIGIT_NUMBER = 9;
+    private final static int DEC = 10;
+    private final static int MAX_VALUE_OF_ONE_DIGIT_NUMBER = 9;
+    private final static int SHIFT_BETWEEN_CHAR_AND_INT = 48;
 
     private Palindrome() {}
 
@@ -24,12 +25,12 @@ public final class Palindrome {
         String newNumberInStringFormat = "";
 
         for (int i = 0; i < numberInStringFormat.length(); i += 2) {
-            int firstDigit = Integer.parseInt(String.valueOf(numberInStringFormat.charAt(i)));
+            int firstDigit = numberInStringFormat.charAt(i) - SHIFT_BETWEEN_CHAR_AND_INT;
             if (i == numberInStringFormat.length() - 1) {
                 newNumberInStringFormat = newNumberInStringFormat.concat(String.valueOf(firstDigit));
                 break;
             }
-            int secondDigit = Integer.parseInt(String.valueOf(numberInStringFormat.charAt(i + 1)));
+            int secondDigit = numberInStringFormat.charAt(i + 1) - SHIFT_BETWEEN_CHAR_AND_INT;
             newNumberInStringFormat = newNumberInStringFormat.concat(String.valueOf(firstDigit + secondDigit));
         }
         return Integer.parseInt(newNumberInStringFormat);

@@ -1,42 +1,33 @@
 package edu.hw1.task3;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NestableArrayTest {
-    @Test
-    @DisplayName("isNestable([1, 2, 3, 4], [0, 6]) -> true")
-    public void isNestable_shouldReturnValue_whenCorrectInput_1Test() {
-        int[] firstArray = {1,2,3,4};
-        int[] secondArray = {0,6};
-        boolean ans = true;
-        assertThat(NestableArray.isNestable(firstArray, secondArray)).isEqualTo(ans);
-    }
-    @Test
-    @DisplayName("isNestable([3, 1], [4, 0]) -> true")
-    public void isNestable_shouldReturnValue_whenCorrectInput_2Test() {
-        int[] firstArray = {3,1};
-        int[] secondArray = {4,0};
-        boolean ans = true;
-        assertThat(NestableArray.isNestable(firstArray, secondArray)).isEqualTo(ans);
-    }
-    @Test
-    @DisplayName("isNestable([9, 9, 8], [8, 9]) -> false")
-    public void isNestable_shouldReturnValue_whenCorrectInput_3Test() {
-        int[] firstArray = {9,9,8};
-        int[] secondArray = {8,9};
-        boolean ans = false;
+    @ParameterizedTest
+    @ArgumentsSource(ArgumentProvider.class)
+    @DisplayName("Nestable array tests")
+    public void isNestable_shouldReturnValue_whenCorrectInput(int[] firstArray, int[] secondArray, boolean ans) {
         assertThat(NestableArray.isNestable(firstArray, secondArray)).isEqualTo(ans);
     }
 
-    @Test
-    @DisplayName("isNestable([1, 2, 3, 4], [2, 3]) -> false")
-    public void isNestable_shouldReturnValue_whenCorrectInput_4Test() {
-        int[] firstArray = {1,2,3,4};
-        int[] secondArray = {2,3};
-        boolean ans = false;
-        assertThat(NestableArray.isNestable(firstArray, secondArray)).isEqualTo(ans);
-    }
+}
 
+final class ArgumentProvider implements ArgumentsProvider {
+
+    @Override
+    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
+        return Stream.of(
+            Arguments.of(new int[] {1, 2, 3, 4}, new int[] {0, 6}, true),
+            Arguments.of(new int[] {3, 1}, new int[] {4, 0}, true),
+            Arguments.of(new int[] {9, 9, 8}, new int[] {8, 9}, false),
+            Arguments.of(new int[] {1, 2, 3, 4}, new int[] {2, 3}, false)
+        );
+    }
 }

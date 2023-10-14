@@ -4,6 +4,10 @@ public final class BrokenString {
     private BrokenString() {}
 
     public static String fixString(String brokenString) {
+        if (brokenString.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         String fixedString = "";
 
         for (int i = 1; i < brokenString.length(); i += 2) {

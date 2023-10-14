@@ -9,11 +9,10 @@ public final class CountDigits {
     public static int countDigits(int number) {
         int num = number;
         int counter = 1;
-        while (num > COMPARE_NUMBER) {
+        while (Math.abs(num) > COMPARE_NUMBER) {
             num /= MOD;
             counter++;
         }
         return counter;
     }
-
 }

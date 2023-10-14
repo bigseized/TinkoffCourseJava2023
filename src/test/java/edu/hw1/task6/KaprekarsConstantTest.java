@@ -14,8 +14,18 @@ public class KaprekarsConstantTest {
         "6174, 0",
         "8352, 1"
     })
-    @DisplayName("Ввод корректной строки")
+    @DisplayName("Ввод корректных строк")
     public void countK_shouldReturnValue_whenCorrectInput(int input, int ans) {
+        assertThat(KaprekarsConstant.countK(input)).isEqualTo(ans);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+        "123, -1",
+        "5555,-1"
+    })
+    @DisplayName("Ввод некорректных строк")
+    public void countK_shouldReturnValue_whenIncorrectInput(int input, int ans) {
         assertThat(KaprekarsConstant.countK(input)).isEqualTo(ans);
     }
 }
