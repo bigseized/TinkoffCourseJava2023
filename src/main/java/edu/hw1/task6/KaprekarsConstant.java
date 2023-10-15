@@ -15,7 +15,7 @@ public final class KaprekarsConstant {
     private KaprekarsConstant() {}
 
     public static int countK(int number) {
-        if (number < MIN_AVAILABLE_VALUE || number > MAX_AVAILABLE_VALUE || checkIsAllDigitsEqual(number)) {
+        if (number < MIN_AVAILABLE_VALUE || number > MAX_AVAILABLE_VALUE || areAllDigitsEqual(number)) {
             return -1;
         }
         if (number == KAPREKARS_CONST) {
@@ -58,14 +58,14 @@ public final class KaprekarsConstant {
     }
 
     private static int typecastWrappedCharacterArrToInt(Character[] charactersArray) {
-        String arrInStringFormat = "";
+        StringBuilder arrInStringFormat = new StringBuilder();
         for (char i : charactersArray) {
-            arrInStringFormat = arrInStringFormat.concat(String.valueOf(i));
+            arrInStringFormat.append(i);
         }
-        return Integer.parseInt(arrInStringFormat);
+        return Integer.parseInt(arrInStringFormat.toString());
     }
 
-    private static boolean checkIsAllDigitsEqual(int number) {
+    private static boolean areAllDigitsEqual(int number) {
         String numberInStringFormat = String.valueOf(number);
         Pattern numberWithEqualDigitsPattern = Pattern.compile("^([0-9])\\1{3}$");
         Matcher matcher = numberWithEqualDigitsPattern.matcher(numberInStringFormat);

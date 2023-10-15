@@ -8,17 +8,17 @@ public final class BrokenString {
             throw new IllegalArgumentException();
         }
 
-        String fixedString = "";
+        StringBuilder fixedString = new StringBuilder();
 
         for (int i = 1; i < brokenString.length(); i += 2) {
-            fixedString = fixedString.concat(Character.toString(brokenString.charAt(i)));
-            fixedString = fixedString.concat(Character.toString(brokenString.charAt(i - 1)));
+            fixedString.append(brokenString.charAt(i));
+            fixedString.append(brokenString.charAt(i - 1));
         }
 
         if (fixedString.length() != brokenString.length()) {
-            fixedString = fixedString.concat(Character.toString(brokenString.charAt(brokenString.length() - 1)));
+            fixedString.append(brokenString.charAt(brokenString.length() - 1));
         }
 
-        return fixedString;
+        return fixedString.toString();
     }
 }
