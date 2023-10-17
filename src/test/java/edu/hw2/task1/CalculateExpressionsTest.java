@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalculateExpressionsTest {
     @Test
-    @DisplayName("1 test")
+    @DisplayName("Проверка вычислений и обработки объектов вместе с примитивами")
     public void isCalculateExpression_returnCorrectValue_test1(){
         var two = new Constant(2);
         var four = new Constant(4);
@@ -21,7 +21,7 @@ public class CalculateExpressionsTest {
     }
 
     @Test
-    @DisplayName("2 test")
+    @DisplayName("Проверка дробного ответа и отрицательной степени")
     public void isCalculateExpression_returnCorrectValue_test2(){
         var two = new Constant(2);
         var four = new Constant(4);
@@ -32,7 +32,7 @@ public class CalculateExpressionsTest {
     }
 
     @Test
-    @DisplayName("3 test")
+    @DisplayName("Проверка реализации вычитания через Addition")
     public void isCalculateExpression_returnCorrectValue_test3(){
         var two = new Constant(2);
         var four = new Constant(4);

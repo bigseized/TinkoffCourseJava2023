@@ -1,13 +1,14 @@
 package edu.hw2.task3;
 
-public class DefaultConnectionManager implements ConnectionManager{
+public class DefaultConnectionManager implements ConnectionManager {
+
+    private final static double PERCENT_25 = 0.25;
+
     @Override
     public Connection getConnection() {
-        if(Math.random() * 100 <= 25){
+        if (Math.random() <= PERCENT_25) {
             return new FaultyConnection();
         }
-        else{
-            return new StableConnection();
-        }
+        return new StableConnection();
     }
 }

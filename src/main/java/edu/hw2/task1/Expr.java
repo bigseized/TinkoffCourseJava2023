@@ -1,9 +1,9 @@
 package edu.hw2.task1;
 
-public sealed interface Expr{
+public sealed interface Expr {
     double evaluate();
 
-    public record Constant(double number) implements Expr {
+    record Constant(double number) implements Expr {
         public Constant(Expr number) {
             this(number.evaluate());
         }
@@ -14,7 +14,7 @@ public sealed interface Expr{
         }
     }
 
-    public record Negate(double number) implements Expr {
+    record Negate(double number) implements Expr {
         public Negate(Expr number) {
             this(number.evaluate());
         }
@@ -25,33 +25,35 @@ public sealed interface Expr{
         }
     }
 
-    public record Exponent(double number, double power) implements Expr {
+    record Exponent(double number, double power) implements Expr {
         public Exponent(Expr number, Expr power) {
             this(number.evaluate(), power.evaluate());
         }
 
-        public Exponent(Expr number, double power){
+        public Exponent(Expr number, double power) {
             this(number.evaluate(), power);
         }
-        public Exponent(double number, Expr power){
+
+        public Exponent(double number, Expr power) {
             this(number, power.evaluate());
         }
 
         @Override
         public double evaluate() {
-            return Math.pow(number,power);
+            return Math.pow(number, power);
         }
     }
 
-    public record Addition(double firstNumber, double secondNumber) implements Expr {
+    record Addition(double firstNumber, double secondNumber) implements Expr {
         public Addition(Expr firstNumber, Expr secondNumber) {
             this(firstNumber.evaluate(), secondNumber.evaluate());
         }
 
-        public Addition(Expr firstNumber, double secondNumber){
+        public Addition(Expr firstNumber, double secondNumber) {
             this(firstNumber.evaluate(), secondNumber);
         }
-        public Addition(double firstNumber, Expr secondNumber){
+
+        public Addition(double firstNumber, Expr secondNumber) {
             this(firstNumber, secondNumber.evaluate());
         }
 
@@ -61,22 +63,22 @@ public sealed interface Expr{
         }
     }
 
-    public record Multiplication(double firstNumber, double secondNumber) implements Expr {
+    record Multiplication(double firstNumber, double secondNumber) implements Expr {
         public Multiplication(Expr firstNumber, Expr secondNumber) {
             this(firstNumber.evaluate(), secondNumber.evaluate());
         }
 
-        public Multiplication(Expr firstNumber, double secondNumber){
+        public Multiplication(Expr firstNumber, double secondNumber) {
             this(firstNumber.evaluate(), secondNumber);
         }
 
-        public Multiplication(double firstNumber, Expr secondNumber){
+        public Multiplication(double firstNumber, Expr secondNumber) {
             this(firstNumber, secondNumber.evaluate());
         }
 
         @Override
         public double evaluate() {
-            return firstNumber*secondNumber;
+            return firstNumber * secondNumber;
         }
     }
 }

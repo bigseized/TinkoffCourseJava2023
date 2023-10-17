@@ -1,8 +1,10 @@
 package edu.hw2.task2;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -17,6 +19,7 @@ public class LSPProblemFixTest {
 
     @ParameterizedTest
     @MethodSource("rectangles_test1")
+    @DisplayName("Оба значения заданы, ширина = 0")
     void rectangleArea_test1(Rectangle rect) {
         rect.setHeight(10);
         rect.setWidth(0);
@@ -32,6 +35,7 @@ public class LSPProblemFixTest {
 
     @ParameterizedTest
     @MethodSource("rectangles_test2")
+    @DisplayName("Задан только один параметр")
     void rectangleArea_test2(Rectangle rect) {
         rect.setHeight(10);
 
@@ -47,6 +51,7 @@ public class LSPProblemFixTest {
 
     @ParameterizedTest
     @MethodSource("rectangles_test3")
+    @DisplayName("Оба значения заданы корректно")
     void rectangleArea_test3(Rectangle rect) {
         rect.setHeight(20);
         rect.setWidth(10);
