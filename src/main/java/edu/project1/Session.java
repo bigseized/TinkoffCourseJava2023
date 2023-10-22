@@ -1,19 +1,18 @@
 package edu.project1;
 
 import java.util.Arrays;
-import org.jetbrains.annotations.NotNull;
 
 public class Session {
-    private final String answer;
-    private final char[] userAnswer;
-    private static final int MAX_ATTEMPTS = 5;
-    private int attempts;
-    private boolean isGameActive = true;
-    private String gameFinishedCause;
     private final static int MAX_LENGTH_OF_WORD = 5;
     private final static String WIN = "WIN";
     private final static String LOSE = "LOSE";
-    private final static char STOP = '?';
+    private final static char STOP_INPUT_SYMBOL = '?';
+    private final static int MAX_ATTEMPTS = 5;
+    private final String answer;
+    private final char[] userAnswer;
+    private int attempts;
+    private boolean isGameActive = true;
+    private String gameFinishedCause;
 
 
     public Session(Dictionary guessedWords) {
@@ -31,37 +30,44 @@ public class Session {
         return usrAnswer;
     }
 
-    @NotNull
     GuessResult guess(char guess) {
         if (!isGameActive) {
             return gameStopCause();
         }
-        if (guess == STOP) {
+        if (guess == STOP_INPUT_SYMBOL) {
             return giveUp();
         }
 
         if (answer.indexOf(guess) != -1) { // буква угадана
-            for (int i = 0; i < answer.length(); i++) {
-                if (answer.charAt(i) == guess) {
-                    userAnswer[i] = guess;
-                }
-            }
-            if (answer.equals(String.valueOf(userAnswer))) {
-                isGameActive = false;
-                gameFinishedCause = WIN;
-            }
-            return new GuessResult.SuccessfulGuess(userAnswer, attempts, MAX_ATTEMPTS);
+            return handleHit(guess);
         } else { // буква не угадана
-            attempts++;
-            if (attempts == MAX_ATTEMPTS) {
-                isGameActive = false;
-                gameFinishedCause = LOSE;
-            }
-            return new GuessResult.FailedGuess(userAnswer, attempts, MAX_ATTEMPTS);
+            return handleMiss();
         }
     }
 
-    @NotNull GuessResult giveUp() {
+    private GuessResult handleHit(char guess) {
+        for (int i = 0; i < answer.length(); i++) {
+            if (answer.charAt(i) == guess) {
+                userAnswer[i] = guess;
+            }
+        }
+        if (answer.equals(String.valueOf(userAnswer))) {
+            isGameActive = false;
+            gameFinishedCause = WIN;
+        }
+        return new GuessResult.SuccessfulGuess(userAnswer, attempts, MAX_ATTEMPTS);
+    }
+
+    private GuessResult handleMiss() {
+        attempts++;
+        if (attempts == MAX_ATTEMPTS) {
+            isGameActive = false;
+            gameFinishedCause = LOSE;
+        }
+        return new GuessResult.FailedGuess(userAnswer, attempts, MAX_ATTEMPTS);
+    }
+
+    GuessResult giveUp() {
         isGameActive = false;
         gameFinishedCause = LOSE;
         return new GuessResult.Defeat(userAnswer, attempts, MAX_ATTEMPTS);

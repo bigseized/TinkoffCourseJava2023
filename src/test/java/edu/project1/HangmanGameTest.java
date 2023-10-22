@@ -7,11 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,14 +15,14 @@ public class HangmanGameTest {
     @Test
     @DisplayName("Проверка на исключение если слово некорректной длины")
     public void session_shouldThrowException_whenGuessedWordSize_incorrect() {
-        Dictionary dictionary = new GuessedWords(new String[] {"tooolong", "anotherlong"});
+        Dictionary dictionary = new InMemoryDictionary(new String[] {"tooolong", "anotherlong"});
         assertThatThrownBy(() -> new Session(dictionary)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("При превышении количества попыток игра останавливается")
     public void session_shouldReturnLose_whenMaxAttempts_Exceeded() {
-        Dictionary dictionary = new GuessedWords(new String[] {"bbbbb"});
+        Dictionary dictionary = new InMemoryDictionary(new String[] {"bbbbb"});
         Session session = new Session(dictionary);
         session.guess('a');
         session.guess('a');
@@ -41,7 +36,7 @@ public class HangmanGameTest {
     @Test
     @DisplayName("При победе игра отстанавливается")
     public void session_shouldReturnWin_whenWordGuessed() {
-        Dictionary dictionary = new GuessedWords(new String[] {"abcd"});
+        Dictionary dictionary = new InMemoryDictionary(new String[] {"abcd"});
         Session session = new Session(dictionary);
         session.guess('a');
         session.guess('b');
@@ -51,11 +46,12 @@ public class HangmanGameTest {
         assertThat(guessResult.message()).isEqualTo("You won!");
     }
 
+
     @ParameterizedTest
     @ArgumentsSource(ArgumentProvider.class)
     @DisplayName("Проверка сообщений GuessResult")
     public void check_Intermediate_States(char letter, String output) {
-        Dictionary dictionary = new GuessedWords(new String[] {"bbbbb"});
+        Dictionary dictionary = new InMemoryDictionary(new String[] {"bbbbb"});
         Session session = new Session(dictionary);
         GuessResult guessResult = session.guess(letter);
         assertThat(guessResult.message()).isEqualTo(output);
