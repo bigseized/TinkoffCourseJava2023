@@ -1,7 +1,8 @@
 package edu.hw2.task4;
 
-import org.junit.Test;
+
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import static edu.hw2.task4.DeterminantOfFunctionCallLocation.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

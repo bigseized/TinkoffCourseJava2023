@@ -14,25 +14,20 @@ public class PopularCommandExecutor {
     }
 
     private void tryExecute(String command) {
-        Connection connection = manager.getConnection();
-        ConnectionException exception = null;
         int attemps = 0;
 
         while (attemps < maxAttempts) {
-            try (connection) {
+            try (Connection connection = manager.getConnection()) {
                 connection.execute(command);
-                break;
+                return;
             } catch (ConnectionException e) {
-                exception = e;
                 attemps++;
+                if (attemps == maxAttempts) {
+                    throw new ConnectionException(e);
+                }
             } catch (Exception t) {
                 throw new ConnectionException(t);
             }
         }
-
-        if (attemps == maxAttempts) {
-            throw new ConnectionException(exception);
-        }
-
     }
 }

@@ -15,4 +15,7 @@ public class Rectangle {
     public double area() {
         return width * height;
     }
+
+    public Rectangle() {
+    }
 }

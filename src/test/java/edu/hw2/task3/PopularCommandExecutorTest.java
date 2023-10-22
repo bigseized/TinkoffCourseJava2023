@@ -15,6 +15,12 @@ public class PopularCommandExecutorTest {
         assertThat(new FaultyConnectionManager().getConnection()).isInstanceOf(FaultyConnection.class);
     }
 
+    @Test
+    @DisplayName("Проверка работы метода ConnectionException.getMessage()")
+    void connectionException_shouldReturnMessage_whenCallException() {
+        assertThat(new ConnectionException("new connection exception").getMessage()).isEqualTo("new connection exception");
+    }
+
     static Stream<Arguments> remoteConnectionArguments() {
         return Stream.of(
             Arguments.of(new DefaultConnectionManager(), 5),
@@ -29,4 +35,6 @@ public class PopularCommandExecutorTest {
         PopularCommandExecutor popularCommandExecutor = new PopularCommandExecutor(manager, maxAttempts);
         popularCommandExecutor.updatePackages();
     }
+
+
 }

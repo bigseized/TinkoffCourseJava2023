@@ -28,8 +28,8 @@ public class LSPProblemFixTest {
 
     static Arguments[] rectangles_test2() {
         return new Arguments[]{
-            //Arguments.of(new Rectangle()), Тест выводит 0, как и в базовом классе при отсутствии Square
-            Arguments.of(new Square()) //Тест выводит 100 тк задана только одна сторона
+            Arguments.of(new Rectangle()),
+            Arguments.of(new Square())
         };
     }
 
@@ -37,9 +37,9 @@ public class LSPProblemFixTest {
     @MethodSource("rectangles_test2")
     @DisplayName("Задан только один параметр")
     void rectangleArea_test2(Rectangle rect) {
-        rect.setHeight(10);
-
-        assertThat(rect.area()).isEqualTo(100.0);
+        Square square = new Square(rect);
+        square.setSide(20);
+        assertThat(square.area()).isEqualTo(400.0);
     }
 
     static Arguments[] rectangles_test3() {

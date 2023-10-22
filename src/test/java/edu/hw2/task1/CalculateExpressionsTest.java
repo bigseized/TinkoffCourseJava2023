@@ -38,9 +38,20 @@ public class CalculateExpressionsTest {
         var four = new Constant(4);
         var multTwoFour = new Multiplication(two,four);
         var exp = new Exponent(multTwoFour, 2);
-        var sixty = new Negate(60);
+        var sixty = new Negate(new Constant(60));
         var res = new Addition(exp, sixty);
 
         assertThat(res.evaluate()).isEqualTo(4);
+    }
+
+    @Test
+    @DisplayName("Проверка верного возврата из метода toString()")
+    public void isCalculateExpression_returnCorrectValue_test4(){
+        var two = new Constant(2);
+        var four = new Constant(4);
+        var multTwoFour = new Multiplication(two,four);
+
+
+        assertThat(multTwoFour.toString()).isEqualTo("(2.0 * 4.0)");
     }
 }

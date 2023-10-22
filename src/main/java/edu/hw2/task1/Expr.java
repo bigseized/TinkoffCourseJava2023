@@ -4,8 +4,9 @@ public sealed interface Expr {
     double evaluate();
 
     record Constant(double number) implements Expr {
-        public Constant(Expr number) {
-            this(number.evaluate());
+        @Override
+        public String toString() {
+            return String.valueOf(number);
         }
 
         @Override
@@ -14,71 +15,53 @@ public sealed interface Expr {
         }
     }
 
-    record Negate(double number) implements Expr {
-        public Negate(Expr number) {
-            this(number.evaluate());
+    record Negate(Expr number) implements Expr {
+
+        @Override
+        public String toString() {
+            return "-(" + number.evaluate() + ")";
         }
 
         @Override
         public double evaluate() {
-            return -number;
+            return -number.evaluate();
         }
     }
 
-    record Exponent(double number, double power) implements Expr {
-        public Exponent(Expr number, Expr power) {
-            this(number.evaluate(), power.evaluate());
-        }
+    record Exponent(Expr number, double power) implements Expr {
 
-        public Exponent(Expr number, double power) {
-            this(number.evaluate(), power);
-        }
-
-        public Exponent(double number, Expr power) {
-            this(number, power.evaluate());
+        @Override
+        public String toString() {
+            return "(" + number.evaluate() + ")" + " ^ " + power;
         }
 
         @Override
         public double evaluate() {
-            return Math.pow(number, power);
+            return Math.pow(number.evaluate(), power);
         }
     }
 
-    record Addition(double firstNumber, double secondNumber) implements Expr {
-        public Addition(Expr firstNumber, Expr secondNumber) {
-            this(firstNumber.evaluate(), secondNumber.evaluate());
-        }
-
-        public Addition(Expr firstNumber, double secondNumber) {
-            this(firstNumber.evaluate(), secondNumber);
-        }
-
-        public Addition(double firstNumber, Expr secondNumber) {
-            this(firstNumber, secondNumber.evaluate());
+    record Addition(Expr firstNumber, Expr secondNumber) implements Expr {
+        @Override
+        public String toString() {
+            return "(" + firstNumber.evaluate() + " + " + secondNumber.evaluate() + ")";
         }
 
         @Override
         public double evaluate() {
-            return firstNumber + secondNumber;
+            return firstNumber.evaluate() + secondNumber.evaluate();
         }
     }
 
-    record Multiplication(double firstNumber, double secondNumber) implements Expr {
-        public Multiplication(Expr firstNumber, Expr secondNumber) {
-            this(firstNumber.evaluate(), secondNumber.evaluate());
-        }
-
-        public Multiplication(Expr firstNumber, double secondNumber) {
-            this(firstNumber.evaluate(), secondNumber);
-        }
-
-        public Multiplication(double firstNumber, Expr secondNumber) {
-            this(firstNumber, secondNumber.evaluate());
+    record Multiplication(Expr firstNumber, Expr secondNumber) implements Expr {
+        @Override
+        public String toString() {
+            return "(" + firstNumber.evaluate() + " * " + secondNumber.evaluate() + ")";
         }
 
         @Override
         public double evaluate() {
-            return firstNumber * secondNumber;
+            return firstNumber.evaluate() * secondNumber.evaluate();
         }
     }
 }

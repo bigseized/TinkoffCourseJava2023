@@ -4,11 +4,11 @@ import java.util.logging.Logger;
 
 public class FaultyConnection implements Connection {
     private static final Logger LOGGER = Logger.getLogger(FaultyConnection.class.getName());
-    private final static double PERCENT_50 = 0.5;
+    private final static double CONNECTION_FAILED_CHANCE = 0.5;
 
     @Override
     public void execute(String command) throws ConnectionException {
-        if (Math.random() <= PERCENT_50) {
+        if (Math.random() <= CONNECTION_FAILED_CHANCE) {
             throw new ConnectionException("Не удалось установить соединение");
         }
         //работа после установки соединения
