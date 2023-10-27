@@ -1,61 +1,47 @@
 package edu.hw2.task2;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
-
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class LSPProblemFixTest {
-    static Arguments[] rectangles_test1() {
-        return new Arguments[]{
+    static Arguments[] rectangles_test() {
+        return new Arguments[] {
             Arguments.of(new Rectangle()),
             Arguments.of(new Square())
         };
     }
 
     @ParameterizedTest
-    @MethodSource("rectangles_test1")
-    @DisplayName("Оба значения заданы, ширина = 0")
-    void rectangleArea_test1(Rectangle rect) {
-        rect.setHeight(10);
-        rect.setWidth(0);
-        assertThat(rect.area()).isEqualTo(0.0);
-    }
-
-    static Arguments[] rectangles_test2() {
-        return new Arguments[]{
-            Arguments.of(new Rectangle()),
-            Arguments.of(new Square())
-        };
-    }
-
-    @ParameterizedTest
-    @MethodSource("rectangles_test2")
-    @DisplayName("Задан только один параметр")
-    void rectangleArea_test2(Rectangle rect) {
-        Square square = new Square(rect);
-        square.setSide(20);
-        assertThat(square.area()).isEqualTo(400.0);
-    }
-
-    static Arguments[] rectangles_test3() {
-        return new Arguments[]{
-            Arguments.of(new Rectangle()),
-            Arguments.of(new Square())
-        };
-    }
-
-    @ParameterizedTest
-    @MethodSource("rectangles_test3")
+    @MethodSource("rectangles_test")
     @DisplayName("Оба значения заданы корректно")
     void rectangleArea_test3(Rectangle rect) {
-        rect.setHeight(20);
-        rect.setWidth(10);
+        Rectangle newRect = rect.setHeight(20);
+        Rectangle ansRect = newRect.setWidth(10);
 
-        assertThat(rect.area()).isEqualTo(200.0);
+        assertThat(ansRect.area()).isEqualTo(200.0);
+    }
+
+    @Test
+    @DisplayName("Проверка установки длины стороны квадрата и вычисление площади")
+    void rectangleArea_test1() {
+        Square square = new Square().setSide(10);
+
+        assertThat(square.area()).isEqualTo(100);
+    }
+
+    @Test
+    @DisplayName("Проверка на создание Rectangle из квадрата и вычисление площади")
+    void rectangleArea_test2() {
+        Square square = new Square(5);
+
+        assertAll(
+            () -> assertThat(square.setHeight(1)).isInstanceOf(Rectangle.class),
+            () -> assertThat(square.area()).isEqualTo(25)
+        );
     }
 }

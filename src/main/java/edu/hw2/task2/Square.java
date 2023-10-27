@@ -5,12 +5,11 @@ public class Square extends Rectangle {
     public Square() {
     }
 
-    public Square(Rectangle rectangle) {
-        this();
+    public Square(int side) {
+        super(side, side);
     }
 
-    public void setSide(int side) {
-        super.setWidth(side);
-        super.setHeight(side);
+    public final Square setSide(int side) {
+        return new Square(side);
     }
 }

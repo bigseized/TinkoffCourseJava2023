@@ -4,18 +4,31 @@ public class Rectangle {
     private int width;
     private int height;
 
-    public void setWidth(int width) {
-        this.width = width;
+    public Rectangle() {
     }
 
-    public void setHeight(int height) {
+    public Rectangle(int width, int height) {
+        this.width = width;
         this.height = height;
+    }
+
+    public final Rectangle setWidth(int width) {
+        return new Rectangle(width, getHeight());
+    }
+
+    public final Rectangle setHeight(int height) {
+        return new Rectangle(getWidth(), height);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public double area() {
         return width * height;
-    }
-
-    public Rectangle() {
     }
 }
