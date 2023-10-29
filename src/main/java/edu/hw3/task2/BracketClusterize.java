@@ -3,8 +3,11 @@ package edu.hw3.task2;
 import java.util.ArrayList;
 
 public class BracketClusterize {
+    private final static char OPEN_BRACKET = '(';
+    private final static char CLOSE_BRACKET = ')';
 
-    private BracketClusterize() {}
+    private BracketClusterize() {
+    }
 
     public static ArrayList<String> clusterize(String input) {
         if (input.isEmpty()) {
@@ -15,15 +18,15 @@ public class BracketClusterize {
         StringBuilder cluster = new StringBuilder();
         ArrayList<String> clustersArray = new ArrayList<>();
 
-        for (char bracket: input.toCharArray()) {
-            if (bracket != '(' && bracket != ')') {
+        for (char bracket : input.toCharArray()) {
+            if (bracket != OPEN_BRACKET && bracket != CLOSE_BRACKET) {
                 throw new IllegalArgumentException("Присутствуют посторонние символы");
             }
-            if (bracket == '(') {
+            if (bracket == OPEN_BRACKET) {
                 openBracketCounter++;
                 cluster.append(bracket);
             }
-            if (bracket == ')') {
+            if (bracket == CLOSE_BRACKET) {
                 closeBracketCounter++;
                 cluster.append(bracket);
             }
@@ -31,7 +34,7 @@ public class BracketClusterize {
                 clustersArray.add(cluster.toString());
                 cluster = new StringBuilder();
             }
-            if (!cluster.isEmpty() && cluster.charAt(0) == ')') {
+            if (!cluster.isEmpty() && cluster.charAt(0) == CLOSE_BRACKET) {
                 throw new IllegalArgumentException("Кластер не может начинаться с закрывающей скобки");
             }
         }

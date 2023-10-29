@@ -7,7 +7,8 @@ public class AtbashCode {
     private final static int LOWEST_LOWERCASE_ASCII_INDEX = 97;
     private final static int HIGHEST_LOWERCASE_ASCII_INDEX = 122;
 
-    private AtbashCode() {}
+    private AtbashCode() {
+    }
 
     public static String encodeString(String word) {
         if (word.isEmpty()) {
@@ -21,10 +22,7 @@ public class AtbashCode {
     }
 
     private static char encodeChar(char letter) {
-        if (letter < LOWEST_UPPERCASE_ASCII_INDEX || letter > HIGHEST_LOWERCASE_ASCII_INDEX) {
-            return letter;
-        }
-        if (letter > HIGHEST_UPPERCASE_ASCII_INDEX && letter < LOWEST_LOWERCASE_ASCII_INDEX) {
+        if (!isLatinAlphaInAscii(letter)) {
             return letter;
         }
 
@@ -35,21 +33,16 @@ public class AtbashCode {
         return encodeLowercaseChar(letter);
     }
 
+    private static boolean isLatinAlphaInAscii(char letter) {
+        return (letter >= LOWEST_UPPERCASE_ASCII_INDEX && letter <= HIGHEST_UPPERCASE_ASCII_INDEX)
+            || (letter >= LOWEST_LOWERCASE_ASCII_INDEX && letter <= HIGHEST_LOWERCASE_ASCII_INDEX);
+    }
+
     private static char encodeUppercaseChar(char letter) {
-        int shift = Math.min(letter - LOWEST_UPPERCASE_ASCII_INDEX, HIGHEST_UPPERCASE_ASCII_INDEX - letter);
-        if (letter - shift == LOWEST_UPPERCASE_ASCII_INDEX) {
-            return (char) (HIGHEST_UPPERCASE_ASCII_INDEX - shift);
-        } else {
-            return (char) (LOWEST_UPPERCASE_ASCII_INDEX + shift);
-        }
+        return (char) (LOWEST_UPPERCASE_ASCII_INDEX - (letter - HIGHEST_UPPERCASE_ASCII_INDEX));
     }
 
     private static char encodeLowercaseChar(char letter) {
-        int shift = Math.min(letter - LOWEST_LOWERCASE_ASCII_INDEX, HIGHEST_LOWERCASE_ASCII_INDEX - letter);
-        if (letter - shift == LOWEST_LOWERCASE_ASCII_INDEX) {
-            return (char) (HIGHEST_LOWERCASE_ASCII_INDEX - shift);
-        } else {
-            return (char) (LOWEST_LOWERCASE_ASCII_INDEX + shift);
-        }
+        return (char) (LOWEST_LOWERCASE_ASCII_INDEX - (letter - HIGHEST_LOWERCASE_ASCII_INDEX));
     }
 }
