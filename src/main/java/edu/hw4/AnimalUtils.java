@@ -22,20 +22,30 @@ public class AnimalUtils {
     }
 
     public static List<Animal> sortByHeight(List<Animal> animalsList) {
-        return animalsList.stream().sorted(Comparator.comparingInt(Animal::height)).collect(Collectors.toList());
+        return animalsList
+            .stream()
+            .sorted(Comparator.comparingInt(Animal::height))
+            .collect(Collectors.toList());
     }
 
     public static List<Animal> sortHeadByWeight(List<Animal> animalsList, int k) {
-        return animalsList.stream().sorted(Comparator.comparingInt(Animal::weight).reversed()).limit(k)
+        return animalsList.stream()
+            .sorted(Comparator.comparingInt(Animal::weight).reversed())
+            .limit(k)
             .collect(Collectors.toList());
     }
 
     public static Map<Type, Integer> groupAnimalsByType(List<Animal> animalsList) {
-        return animalsList.stream().collect(Collectors.groupingBy(Animal::type, Collectors.summingInt(elem -> 1)));
+        return animalsList
+            .stream()
+            .collect(Collectors.groupingBy(Animal::type, Collectors.summingInt(elem -> 1)));
     }
 
     public static Animal findLongestNameAnimal(List<Animal> animalsList) {
-        return animalsList.stream().max(Comparator.comparing(elem -> elem.name().length())).orElse(null);
+        return animalsList
+            .stream()
+            .max(Comparator.comparing(elem -> elem.name().length()))
+            .orElse(null);
     }
 
     public static Sex findMostNumerousSex(List<Animal> animalsList) {
@@ -60,46 +70,75 @@ public class AnimalUtils {
     }
 
     public static Animal findOldestAnimal(List<Animal> animalsList, Integer k) {
-        return animalsList.stream().sorted(Comparator.comparingInt(Animal::age).reversed()).toList().get(k - 1);
+        return animalsList
+            .stream()
+            .sorted(Comparator.comparingInt(Animal::age).reversed())
+            .toList()
+            .get(k - 1);
     }
 
     public static Optional<Animal> findMostHeavyUnderHeight(List<Animal> animalsList, int k) {
-        return animalsList.stream().filter(elem -> elem.height() < k).max(Comparator.comparingInt(Animal::weight));
+        return animalsList
+            .stream()
+            .filter(elem -> elem.height() < k)
+            .max(Comparator.comparingInt(Animal::weight));
     }
 
     public static Integer countPaws(List<Animal> animalsList) {
-        return animalsList.stream().mapToInt(Animal::paws).sum();
+        return animalsList
+            .stream()
+            .mapToInt(Animal::paws)
+            .sum();
     }
 
     public static List<Animal> findAnimalsAgeNotEqualPaws(List<Animal> animalsList) {
-        return animalsList.stream().filter(elem -> elem.age() != elem.paws()).toList();
+        return animalsList
+            .stream()
+            .filter(elem -> elem.age() != elem.paws())
+            .toList();
     }
 
     public static List<Animal> findBitingAnimals(List<Animal> animalsList) {
-        return animalsList.stream().filter(elem -> elem.height() > MIN_HEIGHT && elem.bites()).toList();
+        return animalsList
+            .stream()
+            .filter(elem -> elem.height() > MIN_HEIGHT && elem.bites())
+            .toList();
     }
 
     public static Integer findAnimalsWeightGreaterHeight(List<Animal> animalsList) {
-        return (int) animalsList.stream().filter(elem -> elem.weight() > elem.height()).count();
+        return (int) animalsList.stream()
+            .filter(elem -> elem.weight() > elem.height())
+            .count();
     }
 
     public static List<Animal> findAnimalsMoreThanTwoWordsName(List<Animal> animalsList) {
-        return animalsList.stream().filter(elem -> elem.name().split(" ").length > 2).toList();
+        return animalsList
+            .stream()
+            .filter(elem -> elem.name()
+                .split(" ").length > 2)
+            .toList();
     }
 
     public static Boolean isDogHeightenThanValueExist(List<Animal> animalsList, int k) {
-        return animalsList.stream().anyMatch(elem -> elem.type() == Type.DOG && elem.height() > k);
+        return animalsList
+            .stream()
+            .anyMatch(elem -> elem.type() == Type.DOG && elem.height() > k);
     }
 
     public static Integer sumWeightOfAnimalsAtAge(List<Animal> animalsList, int k, int l) {
-        return animalsList.stream().filter(elem -> elem.age() >= k && elem.age() <= l).mapToInt(Animal::weight).sum();
+        return animalsList
+            .stream()
+            .filter(elem -> elem.age() >= k && elem.age() <= l)
+            .mapToInt(Animal::weight)
+            .sum();
     }
 
     public static List<Animal> sortList(List<Animal> animalsList) {
         return animalsList.stream()
             .sorted(Comparator.comparing(Animal::type)
                 .thenComparing(Animal::sex)
-                .thenComparing(Animal::name)).toList();
+                .thenComparing(Animal::name))
+            .toList();
     }
 
     public static Boolean isSpidersBiteOftenDogs(List<Animal> animalsList) {
