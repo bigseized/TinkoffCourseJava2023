@@ -10,7 +10,7 @@ public class RelativeDatesParser2 extends AbstractDateParser {
     private final static Pattern CURRENT_DATE_FORMAT = Pattern.compile("^([0-9]+) days ago$");
 
     @Override
-    Optional<LocalDate> parse(String date) {
+    public Optional<LocalDate> parse(String date) {
         Matcher dateMatcher = CURRENT_DATE_FORMAT.matcher(date);
         if (date.equals("1 day ago")) {
             return Optional.of(LocalDate.now().minusDays(1));

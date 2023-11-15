@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DateParserTest {
+public final class DateParserTest {
     private static Stream<Arguments> allDataFormats() {
         return Stream.of(
             Arguments.of("2020-10-10", LocalDate.of(2020, 10, 10)),

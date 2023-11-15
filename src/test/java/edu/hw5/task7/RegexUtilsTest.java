@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static edu.hw5.task7.RegexUtils.*;
 
-public class RegexUtilsTest {
+public final class RegexUtilsTest {
     private static Stream<Arguments> firstRegexCorrectInputTest() {
         return Stream.of(
             Arguments.of("010"),

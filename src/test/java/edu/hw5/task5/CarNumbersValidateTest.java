@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static edu.hw5.task5.CarNumbersValidate.isCarNumberCorrect;
 
-public class CarNumbersValidateTest {
+public final class CarNumbersValidateTest {
     private static Stream<Arguments> data() {
         return Stream.of(
             Arguments.of("А123ВЕ777", true),

@@ -15,7 +15,7 @@ public abstract class AbstractDateParser {
         return first;
     }
 
-    abstract Optional<LocalDate> parse(String date);
+    public abstract Optional<LocalDate> parse(String date);
 
     protected Optional<LocalDate> parseNext(String date) {
         if (nextParser != null) {

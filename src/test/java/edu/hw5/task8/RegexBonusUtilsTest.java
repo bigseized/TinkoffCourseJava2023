@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static edu.hw5.task8.RegexBonusUtils.*;
 
-public class RegexBonusUtilsTest {
+public final class RegexBonusUtilsTest {
     private static Stream<Arguments> firstRegexTest() {
         return Stream.of(
             Arguments.of("010", true),

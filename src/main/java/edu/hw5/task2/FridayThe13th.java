@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FridayThe13th {
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -13,8 +14,8 @@ public class FridayThe13th {
     private FridayThe13th() {
     }
 
-    public static String findBadFridays(int year) {
-        ArrayList<String> fridays = new ArrayList<>();
+    public static List<String> findBadFridays(int year) {
+        List<String> fridays = new ArrayList<>();
 
         LocalDate localDate = LocalDate.of(year, 1, 1);
         LocalDate nextFriday = localDate.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
@@ -25,16 +26,14 @@ public class FridayThe13th {
             }
             nextFriday = nextFriday.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
         }
-        return fridays.toString();
+        return fridays;
     }
 
     public static LocalDate findNextBadFriday(LocalDate date) {
         LocalDate tempDate = date;
-        while (true) {
+        while (tempDate.getDayOfMonth() != BAD_NUMBER || tempDate.getDayOfWeek() != DayOfWeek.FRIDAY) {
             tempDate = tempDate.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-            if (tempDate.getDayOfMonth() == BAD_NUMBER) {
-                return tempDate;
-            }
         }
+        return tempDate;
     }
 }

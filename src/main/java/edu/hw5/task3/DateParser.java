@@ -14,10 +14,10 @@ public class DateParser {
         }
 
         AbstractDateParser parser = AbstractDateParser.makeChain(
-            new DashDelimiterOneDigitParser(),
-            new DashDelimiterTwoDigitsParser(),
-            new SlashDelimiterReverseParser(),
-            new SlashDelimiterReverseParser2(),
+            new AbstractDashDelimiterParser(AbstractDashDelimiterParser.TWO_DIGIT_PATTERN) {},
+            new AbstractDashDelimiterParser(AbstractDashDelimiterParser.ONE_DIGIT_PATTERN) {},
+            new AbstractSlashDelimiterParser(AbstractSlashDelimiterParser.FOUR_DIGIT_YEAR_PATTERN) {},
+            new AbstractSlashDelimiterParser(AbstractSlashDelimiterParser.TWO_DIGIT_YEAR_PATTERN) {},
             new RelativeDatesParser(),
             new RelativeDatesParser2()
         );

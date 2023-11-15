@@ -2,16 +2,17 @@ package edu.hw5.task1;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 
-public class ClubAnalytics {
+public final class ClubAnalytics {
 
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm");
     private final static String DASH = " - ";
-    private static final Pattern SESSION_PATTERN =
+    private final static int TO_MILLIS = 1000;
+    private final static Pattern SESSION_PATTERN =
         Pattern.compile("^(\\d{4}-\\d{2}-\\d{2}, \\d{2}:\\d{2}) - (\\d{4}-\\d{2}-\\d{2}, \\d{2}:\\d{2})$");
 
     private ClubAnalytics() {
@@ -22,7 +23,7 @@ public class ClubAnalytics {
             throw new IllegalArgumentException("Пустая статистика сессий");
         }
 
-        long sumOfTimes = 0L;
+        long totalSeconds = 0L;
 
         Duration[] durations = new Duration[intervals.length];
         for (int i = 0; i < intervals.length; i++) {
@@ -36,10 +37,9 @@ public class ClubAnalytics {
             LocalDateTime endLocalTime = LocalDateTime.parse(endTime, DATE_TIME_FORMATTER);
 
             durations[i] = Duration.between(startLocalTime, endLocalTime);
-            sumOfTimes += durations[i].toSeconds();
+            totalSeconds += durations[i].toSeconds();
         }
-        LocalTime ldt = LocalTime.ofSecondOfDay(sumOfTimes / intervals.length);
 
-        return ldt.getHour() + "ч " + ldt.getMinute() + "м";
+        return formatDuration(totalSeconds / intervals.length * TO_MILLIS, "HHч mmм", false);
     }
 }

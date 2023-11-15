@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static edu.hw5.task4.PasswordCheck.isPasswordCorrect;
 
-public class PasswordCheckTest {
+public final class PasswordCheckTest {
     private static Stream<Arguments> correctPasswords() {
         return Stream.of(
             Arguments.of("~qwert"),

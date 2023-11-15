@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static edu.hw5.task6.SubStringsFinder.isSubString;
 
-public class SubStringFinderTest {
+public final class SubStringFinderTest {
     private static Stream<Arguments> data() {
         return Stream.of(
             Arguments.of("achfdbaabgabcaabg", "abc", true),
