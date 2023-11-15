@@ -6,8 +6,11 @@ import edu.project2.types.Coordinate;
 import edu.project2.types.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
+import static edu.project2.utility.GridUtils.areCoordinatesInGridBounds;
+import static edu.project2.utility.GridUtils.isCellUnvisited;
 
 public class DFSAlgorithmGenerator implements Generator {
     private static final Random RANDOM = new Random();
@@ -58,7 +61,7 @@ public class DFSAlgorithmGenerator implements Generator {
 
         while (!genStack.isEmpty() && !unvisited.isEmpty()) {
             Coordinate currentCord = genStack.peek();
-            ArrayList<Pair<Integer, Integer>> availableShifts =
+            List<Pair<Integer, Integer>> availableShifts =
                 getAvailableShifts(currentCord, unvisited, new Pair<>(grid.length, grid[0].length));
             if (availableShifts.isEmpty()) {
                 genStack.pop();
@@ -77,19 +80,21 @@ public class DFSAlgorithmGenerator implements Generator {
         }
     }
 
-    private ArrayList<Pair<Integer, Integer>> getAvailableShifts(
+    private List<Pair<Integer, Integer>> getAvailableShifts(
         Coordinate currentCord, HashMap<Coordinate, Coordinate> unvisited,
         Pair<Integer, Integer> mazeSize
     ) {
-        ArrayList<Pair<Integer, Integer>> availableShifts = new ArrayList<>();
+        List<Pair<Integer, Integer>> availableShifts = new ArrayList<>();
         for (int[] shift : SHIFTS) {
             int newRow = currentCord.row() + shift[0];
             int newCol = currentCord.col() + shift[1];
-            if (newRow >= 0 && newRow < mazeSize.first() && newCol >= 0 && newCol < mazeSize.second()
-                && unvisited.get(new Coordinate(newRow, newCol)) != null) {
+            if (areCoordinatesInGridBounds(mazeSize.first(), mazeSize.second(), newRow, newCol)
+                && isCellUnvisited(unvisited, newRow, newCol)) {
+
                 availableShifts.add(new Pair<>(shift[0], shift[1]));
             }
         }
         return availableShifts;
     }
+
 }

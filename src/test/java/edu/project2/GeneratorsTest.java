@@ -34,7 +34,7 @@ public class GeneratorsTest {
     }
 
     @Test
-    @DisplayName("Проверка на решаемочть лабиринта сгенерированного по алгоритму Прима")
+    @DisplayName("Проверка на решаемость лабиринта сгенерированного по алгоритму Прима")
     void check_PRIMS_Algorithm_ReturnCorrectMaze() {
         PrimsAlgorithmGenerator primsAlgorithmGenerator = new PrimsAlgorithmGenerator();
         Maze maze = primsAlgorithmGenerator.generate(9, 9);

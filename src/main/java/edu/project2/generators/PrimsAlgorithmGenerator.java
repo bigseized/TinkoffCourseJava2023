@@ -8,9 +8,12 @@ import edu.project2.utility.ArraysUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import static edu.project2.utility.GridUtils.areCoordinatesInGridBounds;
+import static edu.project2.utility.GridUtils.isCellAWall;
 
 public class PrimsAlgorithmGenerator implements Generator {
     private final static Random RANDOM = new Random();
+    private static final int[][] SHIFTS = {{-2, 0}, {2, 0}, {0, 2}, {0, -2}};
 
     @Override
     public Maze generate(int height, int width) {
@@ -34,42 +37,25 @@ public class PrimsAlgorithmGenerator implements Generator {
                 new ArrayList<>(Arrays.asList(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST));
             while (!directions.isEmpty()) {
                 int dirIndex = RANDOM.nextInt(0, directions.size());
-                switch (directions.get(dirIndex)) {
-                    case NORTH -> {
-                        if (y - 2 >= 0 && grid[x][y - 2].getType() == Cell.Type.WALL) {
-                            grid[x][y - 1].setType(Cell.Type.PASSAGE);
-                            grid[x][y - 2].setType(Cell.Type.PASSAGE);
-                            cellsForGrowth.add(new Coordinate(x, y - 2));
-                        }
-                    }
-                    case SOUTH -> {
-                        if (y + 2 < width && grid[x][y + 2].getType() == Cell.Type.WALL) {
-                            grid[x][y + 1].setType(Cell.Type.PASSAGE);
-                            grid[x][y + 2].setType(Cell.Type.PASSAGE);
-                            cellsForGrowth.add(new Coordinate(x, y + 2));
-                        }
-                    }
-                    case EAST -> {
-                        if (x + 2 < height && grid[x + 2][y].getType() == Cell.Type.WALL) {
-                            grid[x + 1][y].setType(Cell.Type.PASSAGE);
-                            grid[x + 2][y].setType(Cell.Type.PASSAGE);
-                            cellsForGrowth.add(new Coordinate(x + 2, y));
-                        }
-                    }
-                    case WEST -> {
-                        if (x - 2 >= 0 && grid[x - 2][y].getType() == Cell.Type.WALL) {
-                            grid[x - 1][y].setType(Cell.Type.PASSAGE);
-                            grid[x - 2][y].setType(Cell.Type.PASSAGE);
-                            cellsForGrowth.add(new Coordinate(x - 2, y));
-                        }
-                    }
-                    default -> {
-                    }
+                var direction = directions.get(dirIndex);
+
+                int[] shift = SHIFTS[direction.ordinal()];
+                int newX = x + shift[0];
+                int newY = y + shift[1];
+
+                if (areCoordinatesInGridBounds(width, height, newX, newY)
+                    && isCellAWall(grid, newX, newY)) {
+
+                    grid[x + shift[0] / 2][y + shift[1] / 2].setType(Cell.Type.PASSAGE);
+                    grid[newX][newY].setType(Cell.Type.PASSAGE);
+                    cellsForGrowth.add(new Coordinate(newX, newY));
                 }
+
                 directions.remove(dirIndex);
             }
         }
 
         return new Maze(height, width, grid);
     }
+
 }

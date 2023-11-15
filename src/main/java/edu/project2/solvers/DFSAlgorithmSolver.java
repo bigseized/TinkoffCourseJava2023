@@ -6,6 +6,8 @@ import edu.project2.types.Coordinate;
 import edu.project2.utility.ArraysUtils;
 import java.util.ArrayList;
 import java.util.List;
+import static edu.project2.utility.GridUtils.areCoordinatesInGridBounds;
+import static edu.project2.utility.GridUtils.isCellAPassage;
 
 public class DFSAlgorithmSolver implements Solver {
     private final static int[][] SHIFTS = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
@@ -38,8 +40,10 @@ public class DFSAlgorithmSolver implements Solver {
         for (int[] shift : SHIFTS) {
             int newRow = row + shift[0];
             int newCol = col + shift[1];
-            if (newRow >= 0 && newRow < grid.length && newCol >= 0 && newCol < grid[0].length
-                && !visited[newRow][newCol] && grid[newRow][newCol].getType() == Cell.Type.PASSAGE) {
+            if (areCoordinatesInGridBounds(grid.length, grid[0].length, newRow, newCol)
+                && !visited[newRow][newCol]
+                && isCellAPassage(grid, newRow, newCol)) {
+
                 path.add(new Coordinate(newRow, newCol));
                 List<Coordinate> result = getPath(grid, new Coordinate(newRow, newCol), end, path, visited);
                 if (result != null) {

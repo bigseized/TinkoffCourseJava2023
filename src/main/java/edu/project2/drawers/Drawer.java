@@ -7,5 +7,5 @@ import java.util.List;
 public interface Drawer {
     void draw(Cell[][] maze);
 
-    void draw(Cell[][] maze, List<Coordinate> path);
+    void drawWithPath(Cell[][] maze, List<Coordinate> path);
 }

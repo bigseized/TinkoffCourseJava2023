@@ -2,7 +2,6 @@ package edu.project2.drawers;
 
 import edu.project2.types.Cell;
 import edu.project2.types.Coordinate;
-import edu.project2.utility.ArraysUtils;
 import edu.project2.utility.BannerUtils;
 import java.util.List;
 
@@ -27,22 +26,21 @@ public final class ConsoleDrawer implements Drawer {
     }
 
     @SuppressWarnings("RegexpSinglelineJava")
-    public void draw(Cell[][] grid, List<Coordinate> path) {
+    public void drawWithPath(Cell[][] grid, List<Coordinate> path) {
         System.out.println(BannerUtils.solutionBanner);
 
-        Cell[][] copyGrid = ArraysUtils.copyDeepCellArr(grid);
-        boolean[][] pathInGrid = new boolean[copyGrid.length][copyGrid[0].length];
+        boolean[][] pathInGrid = new boolean[grid.length][grid[0].length];
 
         for (var cell : path) {
             pathInGrid[cell.row()][cell.col()] = true;
         }
-        for (int i = 0; i < copyGrid.length; i++) {
-            for (int j = 0; j < copyGrid[i].length; j++) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
                 if (pathInGrid[i][j]) {
                     printCell(ANSI_YELLOW_BACKGROUND);
                     continue;
                 }
-                if (copyGrid[i][j].getType() == Cell.Type.WALL) {
+                if (grid[i][j].getType() == Cell.Type.WALL) {
                     printCell(ANSI_BLACK_BACKGROUND);
                 } else {
                     printCell(ANSI_WHITE_BACKGROUND);
