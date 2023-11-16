@@ -1,14 +1,14 @@
 package edu.hw6.task1;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -129,5 +129,15 @@ public class DiskMapTest {
         diskMap.putAll(mapForTest);
         var values = diskMap.values();
         assertThat(values).isEqualTo(Set.of("buba", "plug"));
+    }
+
+    @Test
+    @DisplayName("entry set test")
+    public void entrySet_shouldReturnData() {
+        DiskMap diskMap = new DiskMap();
+        diskMap.putAll(mapForTest);
+        var values = diskMap.entrySet();
+        assertThat(values).isEqualTo(Set.of(new AbstractMap.SimpleEntry("jo", "buba"),
+            new AbstractMap.SimpleEntry("weis", "plug")));
     }
 }

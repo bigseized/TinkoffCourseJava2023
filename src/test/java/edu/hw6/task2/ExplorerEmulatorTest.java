@@ -46,4 +46,12 @@ public class ExplorerEmulatorTest {
         cloneFile(filePath);
         assertTrue(Files.exists(copyPath));
     }
+    @Test
+    @DisplayName("Second copy test")
+    public void cloneFiles_shouldCreateSecondCopy() throws IOException{
+        cloneFile(filePath);
+        cloneFile(filePath);
+        cloneFile(filePath);
+        assertTrue(Files.exists(secondCopyPath));
+    }
 }
