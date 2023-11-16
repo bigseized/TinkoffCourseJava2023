@@ -4,22 +4,37 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@SuppressWarnings("MultipleStringLiterals")
 public class ExplorerEmulator {
 
-    public static void cloneFile(Path path) throws IOException {
-        if (!Files.exists(path)) {
-            Files.createFile(path);
-            return;
-        }
-        if (!Files.exists(getNewPath(path))) {
-            Files.createFile(getNewPath(path));
-            return;
-        }
+    private final static String EXCEPTION_MESSAGE = "Невозможно создать файл";
 
-        for (int i = 2; ; i++) {
-            if (!Files.exists(getNewCopyName(path, i))) {
-                Files.createFile(getNewCopyName(path, i));
-                return;
+    private ExplorerEmulator() {
+    }
+
+    public static void cloneFile(Path path) {
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                throw new RuntimeException(EXCEPTION_MESSAGE);
+            }
+        } else if (!Files.exists(getNewPath(path))) {
+            try {
+                Files.createFile(getNewPath(path));
+            } catch (IOException e) {
+                throw new RuntimeException(EXCEPTION_MESSAGE);
+            }
+        } else {
+            for (int i = 2; ; i++) {
+                if (!Files.exists(getNewCopyName(path, i))) {
+                    try {
+                        Files.createFile(getNewCopyName(path, i));
+                    } catch (IOException e) {
+                        throw new RuntimeException(EXCEPTION_MESSAGE);
+                    }
+                    return;
+                }
             }
         }
     }
@@ -34,10 +49,5 @@ public class ExplorerEmulator {
         String oldName = path.toString().split("\\.")[0];
         String fileType = path.toString().split("\\.")[1];
         return Path.of(oldName + " - копия " + "(" + copyCount + ")" + "." + fileType);
-    }
-
-    public static void main(String[] args) throws IOException {
-        cloneFile(Path.of(
-            "C:\\Users\\1\\TinkoffCourseJava2023\\project-template\\src\\main\\java\\edu\\hw6\\task2\\her.txt"));
     }
 }

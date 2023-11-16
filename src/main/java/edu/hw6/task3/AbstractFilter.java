@@ -9,7 +9,7 @@ public interface AbstractFilter extends DirectoryStream.Filter<Path> {
     @Override
     boolean accept(Path entry) throws IOException;
 
-    default AbstractFilter and(AbstractFilter filter){
+    default AbstractFilter and(AbstractFilter filter) {
         return (path -> filter.accept(path) && accept(path));
     }
 }

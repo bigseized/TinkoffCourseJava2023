@@ -13,13 +13,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DiskMap implements Map<String, String> {
-
-    private final Path filePath;
+    private final static String FILE_READ_ERROR = "Ошибка при чтении файла";
+    private final Path filePath = Path
+        .of("src\\main\\java\\edu\\hw6\\task1\\diskMap.txt");
 
     public DiskMap() {
         try {
-            filePath = Files.createFile(Path.of(
-                "C:/Users/1/TinkoffCourseJava2023/project-template/src/main/java/edu/hw6/task1/diskMap.txt"));
+            if (Files.exists(filePath)) {
+                deleteFile();
+            }
+            Files.createFile(filePath);
         } catch (IOException e) {
             throw new RuntimeException("Невозможно создать файл");
         }
@@ -44,7 +47,7 @@ public class DiskMap implements Map<String, String> {
         try {
             return Files.lines(filePath).anyMatch(line -> line.split(":")[0].equals(key));
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла");
+            throw new RuntimeException(FILE_READ_ERROR);
         }
     }
 
@@ -53,7 +56,7 @@ public class DiskMap implements Map<String, String> {
         try {
             return Files.lines(filePath).anyMatch(line -> line.split(":")[1].equals(value));
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла");
+            throw new RuntimeException(FILE_READ_ERROR);
         }
     }
 
@@ -68,7 +71,7 @@ public class DiskMap implements Map<String, String> {
             }
             return null;
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла");
+            throw new RuntimeException(FILE_READ_ERROR);
         }
     }
 
@@ -121,7 +124,7 @@ public class DiskMap implements Map<String, String> {
                 .lines(filePath).map(line -> line.split(":")[0])
                 .collect(Collectors.toSet());
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла");
+            throw new RuntimeException(FILE_READ_ERROR);
         }
     }
 
@@ -133,7 +136,7 @@ public class DiskMap implements Map<String, String> {
                 .lines(filePath).map(line -> line.split(":")[1])
                 .collect(Collectors.toSet());
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла");
+            throw new RuntimeException(FILE_READ_ERROR);
         }
     }
 
@@ -145,12 +148,11 @@ public class DiskMap implements Map<String, String> {
                 .lines(filePath).map(line -> new AbstractMap.SimpleEntry<>(line.split(":")[0], line.split(":")[1]))
                 .collect(Collectors.toSet());
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла");
+            throw new RuntimeException(FILE_READ_ERROR);
         }
     }
 
-    public static void deleteFile() throws IOException {
-        Files.delete(Path
-            .of("C:/Users/1/TinkoffCourseJava2023/project-template/src/main/java/edu/hw6/task1/diskMap.txt"));
+    private void deleteFile() throws IOException {
+        Files.delete(filePath);
     }
 }

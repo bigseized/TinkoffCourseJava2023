@@ -10,7 +10,11 @@ import java.util.regex.Pattern;
 
 public class HackerNews {
 
+    private HackerNews() {
+    }
+
     private final static Pattern TITLE_FINDER = Pattern.compile("\"title\":\"([^\"]*)\"");
+
     public static long[] hackerNewsTopStories() {
         try (HttpClient httpClient = HttpClient.newHttpClient()) {
             HttpResponse<String> response = httpClient.send(
@@ -35,7 +39,7 @@ public class HackerNews {
                     .build(), HttpResponse.BodyHandlers.ofString());
 
             Matcher matcher = TITLE_FINDER.matcher(response.body());
-            if (matcher.find()){
+            if (matcher.find()) {
                 return matcher.group(1);
             } else {
                 return "";
