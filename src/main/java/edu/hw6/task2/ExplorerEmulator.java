@@ -8,46 +8,31 @@ import java.nio.file.Path;
 public class ExplorerEmulator {
 
     private final static String EXCEPTION_MESSAGE = "Невозможно создать файл";
+    private final static String NAME_TYPE_DELIMITER = "\\.";
 
     private ExplorerEmulator() {
     }
 
     public static void cloneFile(Path path) {
-        if (!Files.exists(path)) {
-            try {
-                Files.createFile(path);
-            } catch (IOException e) {
-                throw new RuntimeException(EXCEPTION_MESSAGE);
-            }
-        } else if (!Files.exists(getNewPath(path))) {
-            try {
-                Files.createFile(getNewPath(path));
-            } catch (IOException e) {
-                throw new RuntimeException(EXCEPTION_MESSAGE);
-            }
-        } else {
-            for (int i = 2; ; i++) {
-                if (!Files.exists(getNewCopyName(path, i))) {
-                    try {
-                        Files.createFile(getNewCopyName(path, i));
-                    } catch (IOException e) {
-                        throw new RuntimeException(EXCEPTION_MESSAGE);
-                    }
-                    return;
+        for (int i = 0; ; i++) {
+            if (!Files.exists(getNewCopyName(path, i))) {
+                try {
+                    Files.createFile(getNewCopyName(path, i));
+                } catch (IOException e) {
+                    throw new RuntimeException(EXCEPTION_MESSAGE, e);
                 }
+                return;
             }
         }
     }
 
-    private static Path getNewPath(Path path) {
-        String oldName = path.toString().split("\\.")[0];
-        String fileType = path.toString().split("\\.")[1];
-        return Path.of(oldName + " - копия." + fileType);
-    }
-
     private static Path getNewCopyName(Path path, int copyCount) {
-        String oldName = path.toString().split("\\.")[0];
-        String fileType = path.toString().split("\\.")[1];
-        return Path.of(oldName + " - копия " + "(" + copyCount + ")" + "." + fileType);
+        String oldName = path.toString().split(NAME_TYPE_DELIMITER)[0];
+        String fileType = path.toString().split(NAME_TYPE_DELIMITER)[1];
+        return switch (copyCount) {
+            case 0 -> path;
+            case 1 -> Path.of(oldName + " - копия." + fileType);
+            default -> Path.of(oldName + " - копия " + "(" + copyCount + ")" + "." + fileType);
+        };
     }
 }

@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.Adler32;
 import java.util.zip.CheckedOutputStream;
+import lombok.Cleanup;
 
 public class OutputChain {
 
@@ -23,14 +24,18 @@ public class OutputChain {
             Files.delete(path);
         }
         Files.createFile(path);
+        @Cleanup
+        OutputStream outputStream = Files.newOutputStream(path);
+        @Cleanup
+        var checkedOutputStream = new CheckedOutputStream(outputStream, new Adler32());
+        @Cleanup
+        var bufferedOutputStream = new BufferedOutputStream(checkedOutputStream);
+        @Cleanup
+        var outputStreamWriter = new OutputStreamWriter(bufferedOutputStream, StandardCharsets.UTF_8);
+        @Cleanup
+        var printWriter = new PrintWriter(outputStreamWriter);
+        printWriter.write("Programming is learned by writing programs. ― Brian Kernighan");
+        printWriter.flush();
 
-        try (OutputStream outputStream = Files.newOutputStream(path)) {
-            var checkedOutputStream = new CheckedOutputStream(outputStream, new Adler32());
-            var bufferedOutputStream = new BufferedOutputStream(checkedOutputStream);
-            var outputStreamWriter = new OutputStreamWriter(bufferedOutputStream, StandardCharsets.UTF_8);
-            var printWriter = new PrintWriter(outputStreamWriter);
-            printWriter.write("Programming is learned by writing programs. ― Brian Kernighan");
-            printWriter.flush();
-        }
     }
 }

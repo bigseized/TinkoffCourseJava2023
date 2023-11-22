@@ -4,7 +4,9 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.regex.Pattern;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class DirectoryStreamFilters {
     public static final AbstractFilter REGULAR_FILE = Files::isRegularFile;
     public static final AbstractFilter READABLE = Files::isReadable;
@@ -15,10 +17,6 @@ public class DirectoryStreamFilters {
     public static AbstractFilter largerThan(int size) {
         return (path -> Files.size(path) > size);
     }
-
-    private DirectoryStreamFilters() {
-    }
-
 
     public static AbstractFilter magicNumber(int... magicNumbers) {
         return path -> {

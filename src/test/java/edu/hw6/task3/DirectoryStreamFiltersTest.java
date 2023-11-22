@@ -1,7 +1,6 @@
 package edu.hw6.task3;
 
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -24,12 +23,12 @@ public class DirectoryStreamFiltersTest {
 
     @Test
     public void filters_shouldCorrectlyFilterFiles() {
-        Path pathFile = Paths.get("src/main/java/edu/hw6/task3");
-        List<String> paths = new ArrayList<>();
+        Path pathFile = Paths.get("src", "main", "java", "edu", "hw6", "task3");
+        List<Path> paths = new ArrayList<>();
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(pathFile, filter)) {
-            entries.forEach(path -> paths.add(path.toString()));
-            assertThat(paths).containsExactly("src/main/java/edu/hw6/task3/ga_image.png");
-            assertThat(paths).doesNotContain("src/main/java/edu/hw6/task3/graph.png");
+            entries.forEach(paths::add);
+            assertThat(paths).containsExactly(Path.of("src", "main", "java", "edu", "hw6", "task3", "ga_image.png"));
+            assertThat(paths).doesNotContain(Path.of("src", "main", "java", "edu", "hw6", "task3", "graph.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,6 +1,8 @@
 package edu.hw6.task1;
 
 import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -9,32 +11,36 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 public class DiskMap implements Map<String, String> {
     private final static String FILE_READ_ERROR = "Ошибка при чтении файла";
-    private final Path filePath = Path
-        .of("src\\main\\java\\edu\\hw6\\task1\\diskMap.txt");
+    private final Path filePath;
 
-    public DiskMap() {
+    @SneakyThrows
+    public DiskMap(Path path) {
+        filePath = path;
         try {
             if (Files.exists(filePath)) {
                 deleteFile();
             }
             Files.createFile(filePath);
+            try (FileChannel fileChannel = FileChannel.open(path, WRITE, READ)) {
+                FileLock fileLock = fileChannel.lock();
+            }
         } catch (IOException e) {
-            throw new RuntimeException("Невозможно создать файл");
+            throw new RuntimeException("Ошибка при создании/удалении файла", e);
         }
     }
 
     @Override
+    @SneakyThrows
     public int size() {
-        try {
-            return Files.readAllLines(filePath).size();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Files.readAllLines(filePath).size();
     }
 
     @Override
@@ -56,7 +62,7 @@ public class DiskMap implements Map<String, String> {
         try {
             return Files.lines(filePath).anyMatch(line -> line.split(":")[1].equals(value));
         } catch (IOException e) {
-            throw new RuntimeException(FILE_READ_ERROR);
+            throw new RuntimeException(FILE_READ_ERROR, e);
         }
     }
 
@@ -71,7 +77,7 @@ public class DiskMap implements Map<String, String> {
             }
             return null;
         } catch (IOException e) {
-            throw new RuntimeException(FILE_READ_ERROR);
+            throw new RuntimeException(FILE_READ_ERROR, e);
         }
     }
 
@@ -95,7 +101,7 @@ public class DiskMap implements Map<String, String> {
                 .filter(line -> !line.split(":")[0].equals(key))
                 .toList(), StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Невозможо удалить запись");
+            throw new RuntimeException("Невозможо удалить запись", e);
         }
         return value;
     }
@@ -108,12 +114,9 @@ public class DiskMap implements Map<String, String> {
     }
 
     @Override
+    @SneakyThrows
     public void clear() {
-        try {
-            Files.write(filePath, new byte[0], StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Files.write(filePath, new byte[0], StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     @NotNull
@@ -124,7 +127,7 @@ public class DiskMap implements Map<String, String> {
                 .lines(filePath).map(line -> line.split(":")[0])
                 .collect(Collectors.toSet());
         } catch (IOException e) {
-            throw new RuntimeException(FILE_READ_ERROR);
+            throw new RuntimeException(FILE_READ_ERROR, e);
         }
     }
 
@@ -136,7 +139,7 @@ public class DiskMap implements Map<String, String> {
                 .lines(filePath).map(line -> line.split(":")[1])
                 .collect(Collectors.toSet());
         } catch (IOException e) {
-            throw new RuntimeException(FILE_READ_ERROR);
+            throw new RuntimeException(FILE_READ_ERROR, e);
         }
     }
 
@@ -148,7 +151,7 @@ public class DiskMap implements Map<String, String> {
                 .lines(filePath).map(line -> new AbstractMap.SimpleEntry<>(line.split(":")[0], line.split(":")[1]))
                 .collect(Collectors.toSet());
         } catch (IOException e) {
-            throw new RuntimeException(FILE_READ_ERROR);
+            throw new RuntimeException(FILE_READ_ERROR, e);
         }
     }
 

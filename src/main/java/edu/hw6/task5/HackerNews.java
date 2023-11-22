@@ -30,7 +30,6 @@ public class HackerNews {
     }
 
     public static String news(long id) {
-
         try (HttpClient httpClient = HttpClient.newHttpClient()) {
             HttpResponse<String> response = httpClient.send(
                 HttpRequest.newBuilder()

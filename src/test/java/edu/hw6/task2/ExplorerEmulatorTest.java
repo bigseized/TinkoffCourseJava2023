@@ -1,25 +1,30 @@
 package edu.hw6.task2;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import static edu.hw6.task2.ExplorerEmulator.cloneFile;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExplorerEmulatorTest {
-    private final Path filePath = Path
-        .of("src/main/java/edu/hw6/task2/test.txt");
-    private final Path copyPath = Path.of("src/main/java/edu/hw6/task2/test - копия.txt");
-    private final Path secondCopyPath = Path.of("src/main/java/edu/hw6/task2/test - копия (2).txt");
+    private Path filePath;
+    private Path copyPath;
+    private Path secondCopyPath;
+
+    @TempDir
+    Path tempDir;
 
     @BeforeEach
-    void deleteCopies() throws IOException {
-        Files.deleteIfExists(filePath);
-        Files.deleteIfExists(copyPath);
-        Files.deleteIfExists(secondCopyPath);
+    @SneakyThrows
+    public void init() {
+        filePath = Path.of(String.valueOf(tempDir), "test" + ".txt");
+        copyPath = Path.of(String.valueOf(tempDir), "test - копия" + ".txt");
+        secondCopyPath = Path.of(String.valueOf(tempDir), "test - копия (2)" + ".txt");
     }
 
     @Test
@@ -46,9 +51,10 @@ public class ExplorerEmulatorTest {
         cloneFile(filePath);
         assertTrue(Files.exists(copyPath));
     }
+
     @Test
     @DisplayName("Second copy test")
-    public void cloneFiles_shouldCreateSecondCopy() throws IOException{
+    public void cloneFiles_shouldCreateSecondCopy() {
         cloneFile(filePath);
         cloneFile(filePath);
         cloneFile(filePath);
