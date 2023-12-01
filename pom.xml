@@ -31,6 +31,7 @@
 
         <jetbrains-annotations.version>24.0.1</jetbrains-annotations.version>
         <log4j.version>2.20.0</log4j.version>
+        <projectlombok.version>1.18.30</projectlombok.version>
 
         <junit.version>5.10.0</junit.version>
         <assertj.version>3.24.2</assertj.version>
@@ -105,7 +106,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
+            <version>${projectlombok.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -126,6 +127,11 @@
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.7</version>
         </dependency>
     </dependencies>
 

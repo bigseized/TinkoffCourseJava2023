@@ -5,10 +5,10 @@ import edu.project3.types.Request;
 import edu.project3.types.Response;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -23,11 +23,11 @@ public class LogsParser {
         Locale.US
     );
 
-    public static ParsedLog[] getParsedLogs(List<String> userLogs) {
+    public static ParsedLog[] getParsedLogs(Stream<String> userLogs) {
         return userLogs
-            .stream()
             .map(LogsParser::parse)
             .toArray(ParsedLog[]::new);
+
     }
 
     private static ParsedLog parse(String log) {

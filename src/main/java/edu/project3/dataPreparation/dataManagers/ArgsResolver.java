@@ -21,14 +21,14 @@ public class ArgsResolver {
     private final SourceManager sourceManager = new SourceManager();
 
     public ParsedData getParsedData(RawArgs arguments) {
-        ParsedLog[] logs = getLogs(arguments);
         RawArgs args = copyArgs(arguments);
         setEmptyDates(args);
-        logs = filterLogs(
-            OffsetDateTime.parse(args.getStartDate() + MIDNIGHT, DATE_TIME_FORMATTER),
-            OffsetDateTime.parse(args.getEndDate() + MIDNIGHT, DATE_TIME_FORMATTER),
-            logs
-        );
+
+        ParsedLog[] logs = Arrays
+            .stream(getLogs(args))
+            .filter(log -> isWithinDateRange(args, log))
+            .toArray(ParsedLog[]::new);
+
         return ParsedData
             .builder()
             .logs(logs)
@@ -44,11 +44,11 @@ public class ArgsResolver {
         return sourceManager.getParsedLogs(args.getDataSource());
     }
 
-    private ParsedLog[] filterLogs(OffsetDateTime start, OffsetDateTime end, ParsedLog[] logs) {
-        return Arrays
-            .stream(logs)
-            .filter(entry -> entry.timeStamp().isAfter(start) && entry.timeStamp().isBefore(end))
-            .toArray(ParsedLog[]::new);
+    private boolean isWithinDateRange(RawArgs args, ParsedLog log) {
+        OffsetDateTime start = OffsetDateTime.parse(args.getStartDate() + MIDNIGHT, DATE_TIME_FORMATTER);
+        OffsetDateTime end = OffsetDateTime.parse(args.getEndDate() + MIDNIGHT, DATE_TIME_FORMATTER);
+
+        return (log.timeStamp().isAfter(start) && log.timeStamp().isBefore(end));
     }
 
     private void setEmptyDates(RawArgs args) {

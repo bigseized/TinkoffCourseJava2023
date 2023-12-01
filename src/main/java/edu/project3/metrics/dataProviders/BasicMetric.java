@@ -20,7 +20,7 @@ public class BasicMetric implements Metric {
         map.put("Средний размер ответа", Arrays.stream(data.getParsedData()
                 .getLogs())
             .map(entry -> entry.response().numberOfBytes())
-            .mapToInt(e -> e).sum() / numberOfRequests + "b");
+            .mapToLong(e -> e).sum() / numberOfRequests + "b");
         prepareMetric(map);
     }
 

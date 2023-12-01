@@ -3,7 +3,7 @@ package edu.project3;
 import edu.project3.dataPreparation.dataReceivers.HttpReceiver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.util.List;
+import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpReceiverTest {
@@ -13,7 +13,7 @@ public class HttpReceiverTest {
     @Test
     @DisplayName("HTTP receive logs test")
     public void receive_shouldReturnListOfStringsFromHttp() {
-        List<String> receiver = HttpReceiver.loadLogs(HTTP);
-        assertThat(receiver).isNotEmpty();
+        Stream<String> receiver = new HttpReceiver().loadLogs(HTTP);
+        assertThat(receiver.toList()).isNotEmpty();
     }
 }

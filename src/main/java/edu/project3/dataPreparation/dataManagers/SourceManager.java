@@ -1,50 +1,35 @@
 package edu.project3.dataPreparation.dataManagers;
 
-import edu.project3.dataPreparation.dataParsers.LocalPathParser;
 import edu.project3.dataPreparation.dataParsers.LogsParser;
+import edu.project3.dataPreparation.dataReceivers.AbstractReceiver;
 import edu.project3.dataPreparation.dataReceivers.HttpReceiver;
 import edu.project3.dataPreparation.dataReceivers.LocalReceiver;
 import edu.project3.types.ParsedLog;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import lombok.Getter;
 
 @Getter
 public class SourceManager {
 
-    private List<String> paths;
+    private List<String> paths = new ArrayList<>();
 
     public ParsedLog[] getParsedLogs(String path) {
-        List<String> logs;
+        Stream<String> logs;
 
-        if (isValidURL(path)) {
-            logs = HttpReceiver.loadLogs(path);
-            paths.add(path);
-        } else {
-            try {
-                List<String> parsedLocalPath = LocalPathParser.parseLocalPath(path);
-                logs = LocalReceiver.loadLogs(parsedLocalPath);
-                paths = parsedLocalPath;
-            } catch (FileNotFoundException e) {
-                throw new IllegalArgumentException("Невозможно получить данные");
-            }
-        }
+        AbstractReceiver abstractReceiver = AbstractReceiver.makeChain(
+            new HttpReceiver(),
+            new LocalReceiver()
+        );
+
+        logs = abstractReceiver.get(path).orElseThrow(() -> new RuntimeException("Неудалось получить данные"));
+        paths = abstractReceiver.getUsedPaths();
 
         if (logs == null) {
             throw new IllegalArgumentException("По указанному пути не найдено ни одного лога");
         }
 
         return LogsParser.getParsedLogs(logs);
-    }
-
-    private boolean isValidURL(String checkString) {
-        try {
-            URL url = new URL(checkString);
-            return true;
-        } catch (MalformedURLException e) {
-            return false;
-        }
     }
 }
