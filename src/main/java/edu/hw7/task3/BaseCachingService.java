@@ -13,10 +13,19 @@ public class BaseCachingService implements PersonDatabase {
 
     @Override
     public void add(Person person) {
-        cachedIds.put(person.id(), person);
+        if (!areAllFieldsExist(person)) {
+            throw new RuntimeException("All fields must be not Null");
+        }
+
         cachedNames.computeIfAbsent(person.name(), name -> new ArrayList<>()).add(person);
         cachedAddresses.computeIfAbsent(person.address(), address -> new ArrayList<>()).add(person);
         cachedPhones.computeIfAbsent(person.phoneNumber(), phone -> new ArrayList<>()).add(person);
+
+        if (cachedIds.containsKey(person.id())) {
+            throw new RuntimeException("ID of person already exist");
+        }
+
+        cachedIds.put(person.id(), person);
     }
 
     @Override
@@ -40,5 +49,9 @@ public class BaseCachingService implements PersonDatabase {
     @Override
     public List<Person> findByPhone(String phone) {
         return cachedPhones.getOrDefault(phone, null);
+    }
+
+    private boolean areAllFieldsExist(Person person) {
+        return !(person.address() == null || person.name() == null || person.phoneNumber() == null);
     }
 }
