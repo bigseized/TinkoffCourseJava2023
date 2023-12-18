@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import lombok.Cleanup;
 import lombok.SneakyThrows;
 
 public class Server {
@@ -29,14 +30,13 @@ public class Server {
             channel.register(selector, SelectionKey.OP_ACCEPT);
 
             while (channel.isOpen()) {
-                if (selector.selectNow() > 0) {
-                    Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-                    while (iterator.hasNext()) {
-                        SelectionKey key = iterator.next();
-                        if (key.isAcceptable()) {
-                            handleKey(channel, key, executorService);
-                            iterator.remove();
-                        }
+                selector.select();
+                Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+                while (iterator.hasNext()) {
+                    SelectionKey key = iterator.next();
+                    if (key.isAcceptable()) {
+                        handleKey(channel, key, executorService);
+                        iterator.remove();
                     }
                 }
 
@@ -46,33 +46,29 @@ public class Server {
         }
     }
 
+    @SneakyThrows
     private void handleKey(ServerSocketChannel channel, SelectionKey key, ExecutorService executorService) {
-        try {
-            if (key.isAcceptable()) {
-                SocketChannel socketChannel = channel.accept();
-                socketChannel.configureBlocking(false);
-                executorService.execute(() -> new ClientInteraction(socketChannel).run());
-
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (key.isAcceptable()) {
+            SocketChannel socketChannel = channel.accept();
+            socketChannel.configureBlocking(false);
+            executorService.execute(() -> new ClientInteraction(socketChannel).run());
         }
     }
 
     private record ClientInteraction(SocketChannel clientSocket) {
         @SneakyThrows
         public void run() {
+            @Cleanup
             Selector selector = Selector.open();
             clientSocket.configureBlocking(false);
             clientSocket.register(selector, SelectionKey.OP_READ);
             while (clientSocket.isConnected()) {
-                if (selector.selectNow() > 0) {
-                    Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-                    while (iterator.hasNext()) {
-                        SelectionKey key = iterator.next();
-                        resolveUserData(key);
-                        iterator.remove();
-                    }
+                selector.select();
+                Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+                while (iterator.hasNext()) {
+                    SelectionKey key = iterator.next();
+                    resolveUserData(key);
+                    iterator.remove();
                 }
             }
         }
