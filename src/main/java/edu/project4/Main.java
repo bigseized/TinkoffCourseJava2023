@@ -21,14 +21,11 @@ public class Main {
     public static void main(String[] args) {
         Path root = Path.of("src", "main", "resources");
 
-//        FractalImage fractalImage = FractalImage.create(1920, 1080);
         FractalImage fractalImage = FractalImage.create(7680, 4320);
 
         ParallelRenderer.renderAsync(
             fractalImage,
-//            new Rect(-1.777,-1.0,1.777,1.0),
             new Rect(-3.5, -2.0, 3.5, 2.0),
-//            new Rect(-1, -0.5, 1, 0.5),
             List.of(new SphereTransformation(), new LinearTransformation()),
             Stream.generate(AffineFunction::new).limit(5).toList(),
             7,

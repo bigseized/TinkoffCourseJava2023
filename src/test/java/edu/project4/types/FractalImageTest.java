@@ -27,14 +27,14 @@ class FractalImageTest {
     @DisplayName("Тестирование FractalImage#isContain")
     public void contains_shouldReturnTrue() {
         FractalImage image = FractalImage.create(10, 10);
-        assertThat(image.isContain(5, 5)).isTrue();
+        assertThat(image.contains(5, 5)).isTrue();
     }
 
     @Test
     @DisplayName("Тестирование FractalImage#isContain")
     public void contains_shouldReturnFalse() {
         FractalImage image = FractalImage.create(10, 10);
-        assertThat(image.isContain(15, 15)).isFalse();
+        assertThat(image.contains(15, 15)).isFalse();
     }
 
 }

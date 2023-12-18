@@ -21,14 +21,15 @@ public class FractalImage {
         return new FractalImage(data, width, height);
     }
 
-    public boolean isContain(int x, int y) {
+    public boolean contains(int x, int y) {
         return (x <= width && x >= 0 && y <= height && y >= 0);
     }
 
     public Pixel pixel(int x, int y) {
-        if (isContain(x, y)) {
+        if (contains(x, y)) {
             return data[width * y + x];
         }
         throw new RuntimeException("Введены неверные координаты");
     }
 }
+
