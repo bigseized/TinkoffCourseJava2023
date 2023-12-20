@@ -20,8 +20,9 @@ public class RandomObjectGenerator {
 
     private static final Integer MAX_ARR_LENGTH = 17;
 
-    private RandomObjectGenerator() {
-        String packageName = "edu.hw10";
+    private final Map<Class<?>, Generator<?>> typeGenerators = new HashMap<>();
+
+    private RandomObjectGenerator(String packageName) {
 
         Reflections reflections = new Reflections(packageName);
         Set<Class<? extends Generator>> subTypes = reflections.getSubTypesOf(Generator.class);
@@ -33,10 +34,11 @@ public class RandomObjectGenerator {
         return RandomObjectGeneratorHolder.INSTANCE;
     }
 
-    private final Map<Class<?>, Generator<?>> typeGenerators = new HashMap<>();
-
     @SneakyThrows
     public <T> T nextObject(Class<T> clazz) {
+        if (clazz.getConstructors().length != 1) {
+            throw new RuntimeException("Класс должен содержать единственный конструктор");
+        }
         Constructor<T> constructor = (Constructor<T>) clazz.getConstructors()[0];
         var parameters = constructor.getParameters();
         Object[] generatedFields = generateFields(parameters);
@@ -65,7 +67,8 @@ public class RandomObjectGenerator {
             .orElse(null);
     }
 
-    @NotNull private Object[] generateFields(Parameter[] parameters) {
+    @NotNull
+    private Object[] generateFields(Parameter[] parameters) {
         return Arrays
             .stream(parameters)
             .map(this::generateValue)
@@ -118,7 +121,7 @@ public class RandomObjectGenerator {
     }
 
     private static class RandomObjectGeneratorHolder {
-        private static final RandomObjectGenerator INSTANCE = new RandomObjectGenerator();
+        private static final RandomObjectGenerator INSTANCE = new RandomObjectGenerator("edu.hw10");
 
     }
 
